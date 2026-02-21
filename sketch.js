@@ -2,11 +2,14 @@ let img;
 
 var inputButton;
 var vScale = 16;
+var saveCanvas;
+var tileSize = vScale*12;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
   pixelDensity(1);
   angleMode(DEGREES);
+  saveCanvas =  createGraphics(tileSize, tileSize);
 }
 
 function preload() {
@@ -18,7 +21,7 @@ function preload() {
   fileInput.hide();
   
   inputButton = createButton('Upload');
-  inputButton.position(windowWidth/2-inputButton.width/2,windowHeight/2+(vScale*6)+20);
+  inputButton.position(windowWidth/2-inputButton.width/2,windowHeight/2+(tileSize/2)+20);
   inputButton.mousePressed(() => {
     fileInput.elt.click();
   });
@@ -81,8 +84,8 @@ console.log('hah', pixelColors);
   }
 
   function largePattern() {
-    for (let a = 0; a < windowWidth; a = a + vScale*5*2 + vScale) {
-      for (let b = 0; b < windowHeight; b = b + vScale*5*2 + vScale) {
+    for (let a = 0; a < windowWidth; a = a + tileSize) {
+      for (let b = 0; b < windowHeight; b = b + tileSize) {
           drawPattern(a, b);
       }
   }
@@ -94,9 +97,9 @@ console.log('hah', pixelColors);
     rect(0, 0, windowWidth, windowHeight)
 
   fill(230);
-  let rectSize = vScale*22;
+  let rectSize = tileSize*2;
 rect(windowWidth/2-rectSize/2, windowHeight/2-rectSize/2, rectSize), 
-  drawPattern(windowWidth/2-(vScale*6),windowHeight/2-(vScale*6));
+  drawPattern(windowWidth/2-tileSize/2,windowHeight/2-tileSize/2);
 
 function drawPattern(a,b) {
   for (let y = 0; y < img.height; y++) {
@@ -143,9 +146,10 @@ for (let y = 0; y < img.height; y++) {
 }
 
 function keyReleased() {
-  if (key == "s" || key == "S") saveCanvas(gd.timestamp(), "png");
-
-  if (key === "g") {
-    saveGif("mySketch", 5, { delay: 1 });
-  }
+  if (key == "f" || key == "F") saveCanvas(gd.timestamp(), "png");
+  if (key == "s" || key == "S") {
+    let c = get(windowWidth/2-(tileSize/2),windowHeight/2-(tileSize/2), 200, 200);
+    saveCanvas.image(c, 0, 0);
+    save(saveCanvas, frameCount+".png");
+  };
 }
