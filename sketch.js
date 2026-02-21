@@ -1,0 +1,134 @@
+let img;
+
+var inputButton;
+var vScale = 16;
+
+function setup() {
+  createCanvas(200,200);
+  pixelDensity(1);
+  angleMode(DEGREES);
+}
+
+function preload() {
+  img = loadImage("photo5.JPG");
+
+  32;
+  
+  let fileInput = createFileInput(handleFile);
+  fileInput.hide();
+  
+  inputButton = createButton('Upload');
+  inputButton.position(10,10);
+  inputButton.mousePressed(() => {
+    fileInput.elt.click();
+  });
+}
+
+function handleFile(file) {
+if (file.type === 'image') {
+    img = loadImage(file.data, (img) => {
+    console.log(file.name)
+      img = file.name;
+      draw();
+    });
+  } else {
+    console.log('Not an image file!');
+  }
+}
+
+function draw() {
+  frameRate(4);
+  background(255);
+
+  img.loadPixels();
+
+  loadPixels();
+  var pixelColors = [];
+  var pixelValue = [];
+console.log('hah', pixelColors);
+  
+  //resize image
+  var newWidth = 500 / 5 / vScale;
+  var newHeight = 500 / 5 / vScale;
+  img.resize(newWidth, newHeight);
+  
+  console.log(img.width, img.height)
+  
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let index = (x + y * img.width) * 4;
+      var r = img.pixels[index + 0];
+      var g = img.pixels[index + 1];
+      var b = img.pixels[index + 2];
+
+      pixelColors.push(r, g, b);
+
+      var bright = (r + g + b) / 3;
+      var p = 0;
+
+      if (bright >= 100 && bright <= 150) {
+        var p = 130;
+      } else if (bright >= 151) {
+        var p = 255;
+      } else {
+        var p = 0;
+      }
+
+      pixelValue.push(p);
+      noStroke();
+
+    }
+  }
+
+
+//  var pixelValueInvert = [];
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+
+        fill(pixelValue[x + (y*6)]);
+  
+      
+      rect(x * vScale, y * vScale, vScale);
+    }
+  }
+  
+
+for (let y = 0; y < img.height; y++) {
+    for (let x =0 ; x < img.width; x++) {
+      
+        fill(pixelValue[x + (y*6)]);
+
+      rect((img.width-x) * vScale+vScale*5, y * vScale, vScale);
+    }
+  }
+  
+for (let y = 0; y < img.height; y++) {
+    for (let x =0 ; x < img.width; x++) {
+      
+        fill(pixelValue[x + (y*6)]);
+
+      rect((img.width-x) * vScale+vScale*5, (img.height-y) * vScale+vScale*5, vScale);
+    }
+  }
+
+for (let y = 0; y < img.height; y++) {
+    for (let x =0 ; x < img.width; x++) {
+      
+        fill(pixelValue[x + (y*6)]);
+
+      rect(x * vScale, (img.height-y) * vScale+vScale*5, vScale);
+    }
+  }
+
+    
+  
+  noLoop();
+}
+
+function keyReleased() {
+  if (key == "s" || key == "S") saveCanvas(gd.timestamp(), "png");
+
+  if (key === "g") {
+    saveGif("mySketch", 5, { delay: 1 });
+  }
+}
