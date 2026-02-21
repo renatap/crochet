@@ -4,7 +4,7 @@ var inputButton;
 var vScale = 16;
 
 function setup() {
-  createCanvas(200,200);
+  createCanvas(windowWidth,windowHeight);
   pixelDensity(1);
   angleMode(DEGREES);
 }
@@ -18,7 +18,7 @@ function preload() {
   fileInput.hide();
   
   inputButton = createButton('Upload');
-  inputButton.position(10,10);
+  inputButton.position(windowWidth/2-inputButton.width/2,windowHeight/2+(vScale*6)+20);
   inputButton.mousePressed(() => {
     fileInput.elt.click();
   });
@@ -80,15 +80,32 @@ console.log('hah', pixelColors);
     }
   }
 
+  function largePattern() {
+    for (let a = 0; a < windowWidth; a = a + vScale*5*2 + vScale) {
+      for (let b = 0; b < windowHeight; b = b + vScale*5*2 + vScale) {
+          drawPattern(a, b);
+      }
+  }
+    }
 
-//  var pixelValueInvert = [];
+    largePattern();
+
+    fill(0, 180);
+    rect(0, 0, windowWidth, windowHeight)
+
+  fill(230);
+  let rectSize = vScale*22;
+rect(windowWidth/2-rectSize/2, windowHeight/2-rectSize/2, rectSize), 
+  drawPattern(windowWidth/2-(vScale*6),windowHeight/2-(vScale*6));
+
+function drawPattern(a,b) {
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
 
         fill(pixelValue[x + (y*6)]);
   
       
-      rect(x * vScale, y * vScale, vScale);
+      rect((x * vScale) + a, (y * vScale) + b, vScale);
     }
   }
   
@@ -98,7 +115,7 @@ for (let y = 0; y < img.height; y++) {
       
         fill(pixelValue[x + (y*6)]);
 
-      rect((img.width-x) * vScale+vScale*5, y * vScale, vScale);
+      rect(((img.width-x) * vScale+vScale*5) + a, (y * vScale) + b, vScale);
     }
   }
   
@@ -107,7 +124,7 @@ for (let y = 0; y < img.height; y++) {
       
         fill(pixelValue[x + (y*6)]);
 
-      rect((img.width-x) * vScale+vScale*5, (img.height-y) * vScale+vScale*5, vScale);
+      rect(((img.width-x) * vScale+vScale*5) + a, ((img.height-y) * vScale+vScale*5) + b, vScale);
     }
   }
 
@@ -116,10 +133,10 @@ for (let y = 0; y < img.height; y++) {
       
         fill(pixelValue[x + (y*6)]);
 
-      rect(x * vScale, (img.height-y) * vScale+vScale*5, vScale);
+      rect((x * vScale) + a, ((img.height-y) * vScale+vScale*5) + b, vScale);
     }
   }
-
+}
     
   
   noLoop();
